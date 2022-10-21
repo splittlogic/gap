@@ -68,6 +68,11 @@ class gapInstall extends Command
     $file = null;
     $contents = null;
 
+    // Publish migration files
+    \Artisan::call('vendor:publish --provider="splittlogic\gap\gapPackageServiceProvider" --tag="migrations"');
+    $this->info($step . ' of ' . $totalSteps . ' - Publish migration files');
+    $step++;
+
     // Run database migrations
     \Artisan::call('migrate');
     $this->info($step . ' of ' . $totalSteps . ' - Database files migrated');
@@ -118,27 +123,32 @@ class gapInstall extends Command
     file_put_contents(app_path('Http/Middleware') . '/Admin.php', $contents);
 
     $this->info($step . ' of ' . $totalSteps . ' - Admin middleware updated');
+    $step++;
 
     // Update Kernel
     $contents = file_get_contents($path . '/Kernel.php');
     file_put_contents(app_path('Http/') . '/Kernel.php', $contents);
 
     $this->info($step . ' of ' . $totalSteps . ' - Kernel updated');
+    $step++;
 
     // Update LoginController
     $contents = file_get_contents($path . '/LoginController.php');
     file_put_contents(app_path('Http/Controllers/Auth') . '/LoginController.php', $contents);
 
     $this->info($step . ' of ' . $totalSteps . ' - Login Controller updated');
+    $step++;
 
     // Create Default Admin
     $user = new User();
     $user->password = Hash::make('password');
     $user->email = 'admin@email.com';
     $user->name = 'Default Admin';
+    $user->is_admin = 1;
     $user->save();
 
     $this->info($step . ' of ' . $totalSteps . ' - Default Admin Created');
+    $step++;
 
   }
 

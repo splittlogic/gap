@@ -5,6 +5,7 @@ namespace splittlogic\gap;
 use Illuminate\Support\ServiceProvider;
 
 use splittlogic\gap\Console\gapInstall;
+use splittlogic\past\Console\ScriptLogging;
 
 class gapServiceProvider extends ServiceProvider
 {
@@ -19,16 +20,17 @@ class gapServiceProvider extends ServiceProvider
       /*
        * Optional methods to load your package assets
        */
-       // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+      $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
   		if ($this->app->runningInConsole()) {
   			$this->bootForConsole();
   		}
 
-      // Register gapInstall
+      // Register Console Commands
       if ($this->app->runningInConsole()) {
           $this->commands([
               gapInstall::class,
+              ScriptLogging::class,
           ]);
       }
 
@@ -64,14 +66,22 @@ class gapServiceProvider extends ServiceProvider
   		], 'gap.config');
 
   		// Publishing the views.
+      /*
       $this->publishes([
           __DIR__.'/../resources/views' => base_path('resources/views/vendor/splittlogic'),
       ], 'gap.views');
+      */
 
       // Publishing assets.
       $this->publishes([
           __DIR__.'/../resources/assets' => public_path('vendor/splittlogic'),
       ], 'public');
+
+      // Publishing migrations
+      $this->publishes([
+          __DIR__ . '/../database/migrations/create_scriptslogs_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_scriptslogs_table.php'),
+          // you can add any number of migrations here
+        ], 'migrations');
 
   	}
 }
