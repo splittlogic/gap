@@ -131,7 +131,7 @@ class gapInstall extends Command
     $this->info($step . ' of ' . $totalSteps . ' - Login Controller updated');
 
     // Create Default Admin
-    $user = new App\Models\User();
+    $user = new User();
     $user->password = Hash::make('password');
     $user->email = 'admin@email.com';
     $user->name = 'Default Admin';
