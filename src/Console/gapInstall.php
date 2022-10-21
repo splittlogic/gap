@@ -26,7 +26,7 @@ class gapInstall extends Command
     $file = null;
     $contents = null;
     $step = 1;
-    $totalSteps = 8;
+    $totalSteps = 10;
 
     // Update create users migration file
     $files = scandir(database_path('migrations'));

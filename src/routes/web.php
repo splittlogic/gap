@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use splittlogic\gap\Http\Controllers\gapController;
+use splittlogic\gap\Http\Controllers\gapAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +16,8 @@ Route::get(
   'splittlogic/gap',
   [gapController::class, 'index']
 )->name('splittlogic.gap');
+
+Route::get(
+  'admin',
+  [gapAdminController::class, 'index']
+)->name('gap.Admin');
