@@ -1,0 +1,36 @@
+{
+    "name": "splittlogic/gap",
+    "description": "Collection of scripts to aggregate public US Government data",
+    "keywords": [
+        "splittlogic",
+        "gap"
+    ],
+    "homepage": "https://github.com/splittlogic/gap",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "SplittLogic",
+            "email": "SplittLogic@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": ">=6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "splittlogic\\gap\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "splittlogic\\gap\\gapServiceProvider"
+            ],
+            "aliases": {
+                "gap": "splittlogic\\gap\\Facades\\gap"
+            }
+        }
+    }
+}
