@@ -5,6 +5,8 @@ namespace splittlogic\gap\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
+use App\Models\User;
+
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
