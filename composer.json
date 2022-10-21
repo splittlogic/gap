@@ -17,7 +17,8 @@
     ],
     "require": {
         "symfony/process": ">=5.4",
-        "laravel/ui": "3.x-dev"
+        "laravel/ui": "3.4.6",
+        "symfony/yaml": ">=6.1.6"
     },
     "autoload": {
         "psr-4": {

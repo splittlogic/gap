@@ -5,6 +5,9 @@ namespace splittlogic\gap\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
 class gapInstall extends Command
 {
 
@@ -19,10 +22,8 @@ class gapInstall extends Command
     $files = null;
     $file = null;
     $contents = null;
-
-    $this->info('This is gapInstall');
-
-    $this->info(database_path('migrations'));
+    $step = 1;
+    $totalSteps = 7;
 
     // Update create users migration file
     $files = scandir(database_path('migrations'));
@@ -45,6 +46,8 @@ class gapInstall extends Command
     $contents = file_get_contents($path . '/create_users_table.php');
 
     file_put_contents(database_path('migrations/') . $file, $contents);
+    $this->info($step . ' of ' . $totalSteps . ' - Users table migration file updated');
+    $step++;
 
     // Reset variables
     $files = null;
@@ -54,6 +57,8 @@ class gapInstall extends Command
     // Update User.php model file
     $contents = file_get_contents($path . '/User.php');
     file_put_contents(app_path('Models/') . 'User.php', $contents);
+    $this->info($step . ' of ' . $totalSteps . ' - User model updated');
+    $step++;
 
     // Reset variables
     $files = null;
@@ -62,6 +67,66 @@ class gapInstall extends Command
 
     // Run database migrations
     \Artisan::call('migrate');
+    $this->info($step . ' of ' . $totalSteps . ' - Database files migrated');
+    $step++;
+
+    // Run ui bootstrap for auth
+    \Artisan::call('ui bootstrap -n --auth');
+    $this->info($step . ' of ' . $totalSteps . ' - Bootstrap ui ran');
+    $step++;
+
+    // npm install
+    $this->info('   ...Running npm install.  This will take some time.');
+    $process = new Process(['npm', 'install']);
+    $process->run();
+
+    // executes after the command finishes
+    if (!$process->isSuccessful()) {
+        throw new ProcessFailedException($process);
+    }
+
+    $this->info('   1 of 3 - npm install');
+
+    $process = new Process(['npm', 'install', 'resolve-url-loader@^5.0.0', '--save-dev', '--legacy-peer-deps']);
+    $process->run();
+
+    // executes after the command finishes
+    if (!$process->isSuccessful()) {
+        throw new ProcessFailedException($process);
+    }
+
+    $this->info('   2 of 3 - npm install');
+
+    $process = new Process(['npm', 'run', 'dev']);
+    $process->run();
+
+    // executes after the command finishes
+    if (!$process->isSuccessful()) {
+        throw new ProcessFailedException($process);
+    }
+
+    $this->info('   3 of 3 - npm install');
+
+    $this->info($step . ' of ' . $totalSteps . ' - npm install');
+    $step++;
+
+    // Update Admin middleware 
+    $contents = file_get_contents($path . '/Admin.php');
+    file_put_contents(app_path('Http/Middleware') . '/Admin.php', $contents);
+
+    $this->info($step . ' of ' . $totalSteps . ' - Admin middleware updated');
+
+    // Update Kernel
+    $contents = file_get_contents($path . '/Kernel.php');
+    file_put_contents(app_path('Http/') . '/Kernel.php', $contents);
+
+    $this->info($step . ' of ' . $totalSteps . ' - Kernel updated');
+
+    // Update LoginController
+    $contents = file_get_contents($path . '/LoginController.php');
+    file_put_contents(app_path('Http/Controllers/Auth') . '/LoginController.php', $contents);
+
+    $this->info($step . ' of ' . $totalSteps . ' - Login Controller updated');
 
   }
 
