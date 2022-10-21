@@ -5,7 +5,7 @@ namespace splittlogic\gap;
 use Illuminate\Support\ServiceProvider;
 
 use splittlogic\gap\Console\gapInstall;
-use splittlogic\past\Console\ScriptLogging;
+use splittlogic\gap\Console\ScriptLogging;
 
 class gapServiceProvider extends ServiceProvider
 {
