@@ -17,6 +17,7 @@
     ],
     "require": {
         "symfony/process": ">=5.4"
+        "laravel/ui": ">=4"
     },
     "autoload": {
         "psr-4": {
