@@ -23,7 +23,7 @@ class gapInstall extends Command
     $file = null;
     $contents = null;
     $step = 1;
-    $totalSteps = 7;
+    $totalSteps = 8;
 
     // Update create users migration file
     $files = scandir(database_path('migrations'));
@@ -110,7 +110,7 @@ class gapInstall extends Command
     $this->info($step . ' of ' . $totalSteps . ' - npm install');
     $step++;
 
-    // Update Admin middleware 
+    // Update Admin middleware
     $contents = file_get_contents($path . '/Admin.php');
     file_put_contents(app_path('Http/Middleware') . '/Admin.php', $contents);
 
@@ -127,6 +127,15 @@ class gapInstall extends Command
     file_put_contents(app_path('Http/Controllers/Auth') . '/LoginController.php', $contents);
 
     $this->info($step . ' of ' . $totalSteps . ' - Login Controller updated');
+
+    // Create Default Admin
+    $user = new App\Models\User();
+    $user->password = Hash::make('password');
+    $user->email = 'admin@email.com';
+    $user->name = 'Default Admin';
+    $user->save();
+
+    $this->info($step . ' of ' . $totalSteps . ' - Default Admin Created');
 
   }
 
