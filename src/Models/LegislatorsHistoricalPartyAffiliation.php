@@ -5,7 +5,7 @@ namespace splittlogic\gap\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Scriptslog extends Model
+class LegislatorsHistoricalPartyAffiliation extends Model
 {
 
   // Disable Laravel's mass assignment protection

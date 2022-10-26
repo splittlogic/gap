@@ -17,7 +17,13 @@ Route::get(
   [gapController::class, 'index']
 )->name('splittlogic.gap');
 
-Route::get(
-  'admin',
-  [gapAdminController::class, 'index']
-)->name('gap.Admin');
+// Admin Routes
+Route::group(['middleware' => ['web', 'admin', 'auth']], function(){
+
+  // Dashboard
+  Route::get(
+    'admin',
+    [gapAdminController::class, 'index']
+  )->name('gap.Admin');
+
+});

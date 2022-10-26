@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateLegislatorsCurrentTermsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('legislators_current_terms', function (Blueprint $table) {
+            $table->id();
+            $table->integer('legislators_current_id');
+            $table->string('type', 5)->nullable();
+            $table->string('start', 10)->nullable();
+            $table->string('end', 10)->nullable();
+            $table->string('state', 2)->nullable();
+            $table->string('district', 3)->nullable();
+            $table->string('party', 30)->nullable();
+            $table->string('url')->nullable();
+            $table->string('class', 1)->nullable();
+            $table->string('address', 100)->nullable();
+            $table->string('phone', 15)->nullable();
+            $table->string('fax', 15)->nullable();
+            $table->string('contact_form')->nullable();
+            $table->string('office', 50)->nullable();
+            $table->string('state_rank', 10)->nullable();
+            $table->string('rss_url')->nullable();
+            $table->string('how', 20)->nullable();
+            $table->string('caucus', 10)->nullable();
+            $table->string('end_type', 20)->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('legislators_current_terms');
+    }
+}

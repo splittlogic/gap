@@ -52,24 +52,31 @@ class gapInstall extends Command
     $this->info($step . ' of ' . $totalSteps . ' - Users table migration file updated');
     $step++;
 
-    // Reset variables
-    $files = null;
-    $file = null;
-    $contents = null;
-
     // Update User.php model file
     $contents = file_get_contents($path . '/User.php');
     file_put_contents(app_path('Models/') . 'User.php', $contents);
     $this->info($step . ' of ' . $totalSteps . ' - User model updated');
     $step++;
 
-    // Reset variables
-    $files = null;
-    $file = null;
-    $contents = null;
-
     // Publish migration files
-    \Artisan::call('vendor:publish --provider="splittlogic\gap\gapPackageServiceProvider" --tag="migrations"');
+    $check = null;
+    foreach ($files as $f)
+    {
+      if (str_contains($f, 'create_scriptslogs_table'))
+      {
+        $check = true;
+      }
+    }
+    if (is_null($check))
+    {
+      \Artisan::call(
+        'vendor:publish',
+        [
+          '--force' => true,
+          '--provider' => 'splittlogic\gap\gapServiceProvider',
+          '--tag' => 'migrations'
+          ]);
+    }
     $this->info($step . ' of ' . $totalSteps . ' - Publish migration files');
     $step++;
 
@@ -86,6 +93,7 @@ class gapInstall extends Command
     // npm install
     $this->info('   ...Running npm install.  This will take some time.');
     $process = new Process(['npm', 'install']);
+    $process->setTimeout(240);
     $process->run();
 
     // executes after the command finishes
@@ -127,7 +135,7 @@ class gapInstall extends Command
 
     // Update Kernel
     $contents = file_get_contents($path . '/Kernel.php');
-    file_put_contents(app_path('Http/') . '/Kernel.php', $contents);
+    file_put_contents(app_path('Http') . '/Kernel.php', $contents);
 
     $this->info($step . ' of ' . $totalSteps . ' - Kernel updated');
     $step++;
@@ -140,12 +148,16 @@ class gapInstall extends Command
     $step++;
 
     // Create Default Admin
-    $user = new User();
-    $user->password = Hash::make('password');
-    $user->email = 'admin@email.com';
-    $user->name = 'Default Admin';
-    $user->is_admin = 1;
-    $user->save();
+    $admin = User::where('email', 'admin@email.com')->first();
+    if (is_null($admin))
+    {
+      $user = new User();
+      $user->password = Hash::make('password');
+      $user->email = 'admin@email.com';
+      $user->name = 'Default Admin';
+      $user->is_admin = 1;
+      $user->save();
+    }
 
     $this->info($step . ' of ' . $totalSteps . ' - Default Admin Created');
     $step++;

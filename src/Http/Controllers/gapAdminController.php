@@ -14,7 +14,7 @@ class gapAdminController extends Controller
   public function index ()
   {
 
-    $content = 'This is admin'; 
+    $content = 'This is admin';
 
     return view('gap::blank', ['content' => $content]);
 

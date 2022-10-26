@@ -1,0 +1,56 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateLegislatorsHistoricalsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('legislators_historicals', function (Blueprint $table) {
+            $table->id();
+            $table->string('bioguide', 10)->nullable();
+            $table->string('thomas', 10)->nullable();
+            $table->string('lis', 10)->nullable();
+            $table->string('govtrack', 10)->nullable();
+            $table->string('opensecrets', 15)->nullable();
+            $table->string('votesmart', 10)->nullable();
+            $table->string('fec1', 10)->nullable();
+            $table->string('fec2', 10)->nullable();
+            $table->string('fec3', 10)->nullable();
+            $table->string('cspan', 10)->nullable();
+            $table->string('wikipedia', 100)->nullable();
+            $table->string('house_history', 20)->nullable();
+            $table->string('ballotpedia', 50)->nullable();
+            $table->string('maplight', 10)->nullable();
+            $table->string('icpsr', 10)->nullable();
+            $table->string('wikidata', 20)->nullable();
+            $table->string('google_entity_id', 20)->nullable();
+            $table->string('name_first', 30)->nullable();
+            $table->string('name_last', 30)->nullable();
+            $table->string('name_official_full', 100)->nullable();
+            $table->string('name_middle', 30)->nullable();
+            $table->string('name_nickname', 30)->nullable();
+            $table->string('name_suffix', 5)->nullable();
+            $table->string('birthday', 10)->nullable();
+            $table->string('gender', 2)->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('legislators_historicals');
+    }
+}
